@@ -18,6 +18,7 @@ class Pytanie:
     odps = []
     d_odp = 1
     mult = ""
+    pkt = 0
 
 cf = open('pytania_normalne.csv')
 reader = csv.reader(cf)
@@ -40,15 +41,20 @@ for i,x in enumerate(reader):
         p.d_odp=x[13].lower()
         p.nr=x[0]
         p.mult=x[14]
+        p.pkt=int(x[16])
         pytania.append(p)
 
-dobre = 0
-zle = 0
+pkt = 0
+maxpkt = 0
+zro_pytania =0
 while(True):
     p = rand.choice(pytania)
     tmp = input()
     os.system("clear")
-    cli_ui.info_3(cli_ui.green , "DOBRE: ",dobre , cli_ui.yellow , " || " , cli_ui.red , "ŹLE: ", zle)
+    if maxpkt==0:
+        cli_ui.info_3(cli_ui.green , "PUNKTY: ",pkt , cli_ui.yellow , " || " , cli_ui.red , "MAX PUNKTÓW: ", maxpkt,cli_ui.yellow , " || ", cli_ui.blue,"RATIO: ",0," || ZROBIONE PYTANIA: ",zro_pytania)
+    else:
+        cli_ui.info_3(cli_ui.green , "PUNKTY: ",pkt , cli_ui.yellow , " || " , cli_ui.red , "MAX PUNKTÓW: ", maxpkt,cli_ui.yellow , " || ", cli_ui.blue,"RATIO: ",pkt/maxpkt," || ZROBIONE PYTANIA: ",zro_pytania)
     cli_ui.info_1(p.text)
     #cli_ui.info_1(p.mult)
     if len(p.odps)!=0:
@@ -117,6 +123,8 @@ while(True):
     
 
     odp = input().lower()
+    maxpkt+=p.pkt
+    zro_pytania+=1
     while(odp==''):
         odp = input().lower()
     if (odp =='1'):
@@ -130,20 +138,20 @@ while(True):
 
     if p.d_odp=="t":
         if (odp == p.d_odp or odp=="tak"):
-            dobre+=1
+            pkt+=p.pkt
             cli_ui.info_2(cli_ui.green , "DOBRZE\n")
             continue
     
     if p.d_odp=="n":
         if (odp == p.d_odp or odp=="nie"):
-            dobre+=1
+            pkt+=p.pkt
             cli_ui.info_2(cli_ui.green , "DOBRZE\n")
             continue
     
     if (p.d_odp == odp):
-        dobre+=1
+        pkt+=p.pkt
         cli_ui.info_2(cli_ui.green , "DOBRZE\n")
         continue
 
     cli_ui.info_2(cli_ui.red , "ŹLE\n")
-    zle+=1
+    
